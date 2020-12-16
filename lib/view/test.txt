@@ -1,0 +1,56 @@
+void sendOTP() async {
+    try {
+      final PhoneCodeAutoRetrievalTimeout autoRetrievalTimeout = (String code) {
+        verificationId = code;
+        notifyListeners();
+      };
+
+      final PhoneCodeSent sms = (String verId, [int forceCodeSent]) {
+        verificationId = verId;
+      };
+
+      final PhoneVerificationCompleted verifiedSuccess = (AuthCredential user) {
+        print("verification done ${user.providerId}");
+      };
+
+      final PhoneVerificationFailed verifiedError = (AuthException user) {
+        print("verification failed ${user.code} ${user.message}");
+      };
+
+      await auth.verifyPhoneNumber(
+        phoneNumber: "+91${phoneNumber.text}",
+        timeout: Duration(seconds: 10),
+        codeSent: sms,
+        codeAutoRetrievalTimeout: autoRetrievalTimeout,
+        verificationCompleted: verifiedSuccess,
+        verificationFailed: verifiedError,
+      );
+    } catch (error) {
+      print("********* Error in sending OTP $error");
+    }
+  }
+
+  void signIn() async {
+    try {
+      final AuthCredential credential = PhoneAuthProvider.getCredential(
+          verificationId: verificationId, smsCode: otp.text);
+      final firebaseUser = await auth.signInWithCredential(credential);
+      if (firebaseUser.user.uid != null) {
+        var data = {
+          "name": name.text,
+          "email": email.text,
+          "phone": phoneNumber.text,
+          "created_at": DateTime.now().millisecondsSinceEpoch,
+          "updated_at": DateTime.now().millisecondsSinceEpoch
+        };
+        await firestore
+            .collection("user")
+            .document(firebaseUser.user.uid)
+            .setData(data, merge: true);
+        sharedPreferences = await SharedPreferences.getInstance();
+        sharedPreferences.setInt("count", 0);
+      }
+    } catch (error) {
+      print("********** ERROR IN SIGN IN $error");
+    }
+  }
