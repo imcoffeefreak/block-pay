@@ -4,17 +4,16 @@ import 'package:flutter/foundation.dart';
 
 class BalanceController extends ChangeNotifier{
 
-  Data cardData;
+  Data? cardData;
 
-  BalanceController({Data cardData}){
-    changeCard(model: cardData);
+  BalanceController({Data? cardData}) {
+    changeCard(model: cardData!);
   }
 
-  changeCard({Data model}){
-    if(model!=null){
+  changeCard({Data? model}) {
+    if (model != null) {
       cardData = model;
     }
     notifyListeners();
   }
-
 }

@@ -1,16 +1,18 @@
+import 'package:block_pay/model/cardModel.dart' as c;
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:block_pay/model/cardModel.dart' as c;
 
 class AtmCards extends StatefulWidget {
-  c.Data cards;
-  AtmCards({c.Data data}){
-    if(data!=null){
+  c.Data? cards;
+
+  AtmCards({c.Data? data}) {
+    if (data != null) {
       cards = data;
-    }else{
+    } else {
       data = c.Data();
     }
   }
+
   @override
   _AtmCardsState createState() => _AtmCardsState();
 }
@@ -60,7 +62,7 @@ class _AtmCardsState extends State<AtmCards> {
                       ),
                     ),
                     Text(
-                      "${widget.cards.holderName}",
+                      "${widget.cards!.holderName}",
                       style: GoogleFonts.inconsolata(
                         color: Colors.white,
                         fontSize: 18,
@@ -79,7 +81,7 @@ class _AtmCardsState extends State<AtmCards> {
                           ),
                         ),
                         Text(
-                          " ${widget.cards.cardNumber}",
+                          " ${widget.cards!.cardNumber}",
                           style: GoogleFonts.inconsolata(
                             color: Colors.white,
                             fontSize: 18,
@@ -104,7 +106,7 @@ class _AtmCardsState extends State<AtmCards> {
                               width: 2,
                             ),
                             Text(
-                              "${widget.cards.amountAvailable}",
+                              "${widget.cards!.amountAvailable}",
                               style: GoogleFonts.roboto(
                                 color: Colors.white,
                                 fontSize: 16,
@@ -113,7 +115,7 @@ class _AtmCardsState extends State<AtmCards> {
                           ],
                         ),
                         Text(
-                          "${widget.cards.cardType}",
+                          "${widget.cards!.cardType}",
                           style: GoogleFonts.inconsolata(
                             color: Colors.white,
                             fontSize: 20,

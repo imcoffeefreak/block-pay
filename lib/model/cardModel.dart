@@ -1,47 +1,25 @@
 class CardModel {
-//  List<Cards> card;
-//
-//  CardModel({this.card});
-//
-//  CardModel.fromJson(Map<String, dynamic> json,String userId) {
-//    if (json['card'] != null) {
-//      card = new List<Cards>();
-//      json['card'].forEach((v) {
-//        card.add(new Cards.fromJson(v,userId));
-//      });
-//    }
-//  }
-//
-//  Map<String, dynamic> toJson() {
-//    final Map<String, dynamic> data = new Map<String, dynamic>();
-//    if (this.card != null) {
-//      data['card'] = this.card.map((v) => v.toJson()).toList();
-//    }
-//    return data;
-//  }
-//}
-//
-//class Cards {
-  int blockNumber;
-  String previousHash;
-  String timestamp;
-  Data data;
-  String userId;
-  String hash;
+  int? blockNumber;
+  String? previousHash;
+  String? timestamp;
+  Data? data;
+  String? userId;
+  String? hash;
 
-  CardModel(
-      {this.blockNumber,
-      this.previousHash,
-      this.userId,
-      this.timestamp,
-      this.data,
-      this.hash});
+  CardModel({
+    required this.blockNumber,
+    required this.previousHash,
+    required this.userId,
+    required this.timestamp,
+    required this.data,
+    required this.hash,
+  });
 
   CardModel.fromJson(Map<String, dynamic> json, String userId) {
     blockNumber = json['blockNumber'];
     previousHash = json['previousHash'];
     timestamp = json['timestamp'];
-    data = json['data'] != null ? new Data.fromJson(json['data']) : null;
+    data = (json['data'] != null ? new Data.fromJson(json['data']) : null)!;
     hash = json['hash'];
     userId = json['userId'];
   }
@@ -52,7 +30,7 @@ class CardModel {
     data['previousHash'] = this.previousHash;
     data['timestamp'] = this.timestamp;
     if (this.data != null) {
-      data['data'] = this.data.toJson();
+      data['data'] = this.data!.toJson();
     }
     data['hash'] = this.hash;
     return data;
@@ -60,12 +38,12 @@ class CardModel {
 }
 
 class Data {
-  String holderName;
-  String cardNumber;
-  int amountAvailable;
-  String cardType;
-  String expiryDate;
-  String userId;
+  String? holderName;
+  String? cardNumber;
+  int? amountAvailable;
+  String? cardType;
+  String? expiryDate;
+  String? userId;
 
   Data({
     this.holderName,

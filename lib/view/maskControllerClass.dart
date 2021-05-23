@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 
 class MaskedTextController extends TextEditingController {
-  MaskedTextController({String text, this.mask, Map<String, RegExp> translator})
-      : super(text: text) {
+  MaskedTextController({String? text, this.mask, Map<String, RegExp>? translator}) : super(text: text) {
     this.translator = translator ?? MaskedTextController.getDefaultTranslator();
 
     addListener(() {
@@ -18,9 +17,9 @@ class MaskedTextController extends TextEditingController {
     updateText(this.text);
   }
 
-  String mask;
+  String? mask;
 
-  Map<String, RegExp> translator;
+  Map<String, RegExp>? translator;
 
   Function afterChange = (String previous, String next) {};
   Function beforeChange = (String previous, String next) {
@@ -31,7 +30,7 @@ class MaskedTextController extends TextEditingController {
 
   void updateText(String text) {
     if (text != null) {
-      this.text = _applyMask(mask, text);
+      this.text = _applyMask(mask!, text);
     } else {
       this.text = '';
     }
@@ -50,8 +49,7 @@ class MaskedTextController extends TextEditingController {
 
   void moveCursorToEnd() {
     final String text = _lastUpdatedText;
-    selection =
-        TextSelection.fromPosition(TextPosition(offset: (text ?? '').length));
+    selection = TextSelection.fromPosition(TextPosition(offset: (text).length));
   }
 
   @override
@@ -100,8 +98,8 @@ class MaskedTextController extends TextEditingController {
       }
 
       // apply translator if match
-      if (translator.containsKey(maskChar)) {
-        if (translator[maskChar].hasMatch(valueChar)) {
+      if (translator!.containsKey(maskChar)) {
+        if (translator![maskChar]!.hasMatch(valueChar)) {
           result += valueChar;
           maskCharIndex += 1;
         }

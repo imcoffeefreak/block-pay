@@ -14,7 +14,7 @@ description: A new Flutter application.
 version: 1.0.1+2
 
 environment:
-  sdk: ">=2.1.0 <3.0.0"
+  sdk: ">=2.12.0-0 <3.0.0"
 
 dependencies:
   flutter:
@@ -22,45 +22,41 @@ dependencies:
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
-  cupertino_icons: ^0.1.2
+  cupertino_icons: ^1.0.3
 
   #Fonts
-  google_fonts: ^0.5.0+1
-  font_awesome_flutter: ^8.8.1
+  google_fonts: ^2.1.0
+  font_awesome_flutter: ^9.0.0
 
 
   #Neumorphic design
-  flutter_neumorphic: ^1.0.4
-  neumorphic: ^0.3.0
+  flutter_neumorphic: ^3.1.0
+  neumorphic: ^0.4.0
 
   #PIN field
-  pin_code_fields: ^2.5.1
+  pin_code_fields: ^7.1.0
 
   #Bottom sheets
   solid_bottom_sheet: ^0.1.9
 
-  #Toggle
-  lite_rolling_switch: ^0.1.1
-
   #toast
-  bot_toast: ^3.0.0
+  bot_toast: ^4.0.1
 
   #Server sided
-  firebase_auth: ^0.16.0
-  cloud_firestore: ^0.13.5
-  http: ^0.12.1
+  firebase_auth: ^1.2.0
+  cloud_firestore: ^2.2.0
+  http: ^0.13.3
 
 
   #shared chache
-  shared_preferences: ^0.5.7+2
+  shared_preferences: ^2.0.5
 
   #provider
-  provider: ^4.0.5+1
+  provider: ^5.0.0
 
-  flutter_signin_button: ^1.0.0
-  google_sign_in: ^4.4.6
-  progress_dialog: ^1.2.2
-
+  flutter_signin_button: ^2.0.0
+  google_sign_in: ^5.0.3
+  firebase_core: ^1.2.0
 
 dev_dependencies:
   flutter_test:

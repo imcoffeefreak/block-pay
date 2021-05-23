@@ -8,30 +8,30 @@ import 'package:shared_preferences/shared_preferences.dart';
 class AuthenticationController extends ChangeNotifier {
   bool isSignin = true;
   bool isPhoneValid = false;
-  FirebaseAuth auth;
-  Firestore firestore;
-  String smsCode;
-  String verificationId;
-  SharedPreferences sharedPreferences;
+  FirebaseAuth? auth;
+  FirebaseFirestore? firestore;
+  String? smsCode;
+  String? verificationId;
+  SharedPreferences? sharedPreferences;
 
   /**
    * Sign in details
    */
-  TextEditingController phoneNumber;
-  TextEditingController otp;
+  TextEditingController? phoneNumber;
+  TextEditingController? otp;
 
   /**
    * Sign up details
    */
-  TextEditingController name;
-  TextEditingController email;
+  TextEditingController? name;
+  TextEditingController? email;
 
   /**
    * Google Signin
    *
    */
-  GoogleSignIn googleSignIn;
-  GoogleSignInAccount currentUser;
+  GoogleSignIn? googleSignIn;
+  GoogleSignInAccount? currentUser;
 
   AuthenticationController() {
     phoneNumber = TextEditingController();
@@ -39,7 +39,7 @@ class AuthenticationController extends ChangeNotifier {
     name = TextEditingController();
     email = TextEditingController();
     auth = FirebaseAuth.instance;
-    firestore = Firestore.instance;
+    firestore = FirebaseFirestore.instance;
     googleSignIn = GoogleSignIn(
       scopes: <String>[
         'email',
@@ -50,15 +50,15 @@ class AuthenticationController extends ChangeNotifier {
 
   changeAuth(bool value) {
     isSignin = value;
-    phoneNumber.clear();
-    otp.clear();
+    phoneNumber!.clear();
+    otp!.clear();
     isPhoneValid = false;
     notifyListeners();
   }
 
   checkNumberValid() async {
-    if (phoneNumber.text.length == 10) {
-      int numb = int.parse(phoneNumber.text[0]);
+    if (phoneNumber!.text.length == 10) {
+      int numb = int.parse(phoneNumber!.text[0]);
       if (numb >= 6) {
         isPhoneValid = true;
         sendOTP();
@@ -74,7 +74,7 @@ class AuthenticationController extends ChangeNotifier {
         notifyListeners();
       };
 
-      final PhoneCodeSent sms = (String verId, [int forceCodeSent]) {
+      final PhoneCodeSent sms = (String? verId, [int? forceCodeSent]) {
         verificationId = verId;
       };
 
@@ -82,12 +82,12 @@ class AuthenticationController extends ChangeNotifier {
         print("verification done ${user.providerId}");
       };
 
-      final PhoneVerificationFailed verifiedError = (AuthException user) {
+      final PhoneVerificationFailed verifiedError = (FirebaseAuthException user) {
         print("verification failed ${user.code} ${user.message}");
       };
 
-      await auth.verifyPhoneNumber(
-        phoneNumber: "+91${phoneNumber.text}",
+      await auth!.verifyPhoneNumber(
+        phoneNumber: "+91${phoneNumber!.text}",
         timeout: Duration(seconds: 10),
         codeSent: sms,
         codeAutoRetrievalTimeout: autoRetrievalTimeout,
@@ -101,23 +101,20 @@ class AuthenticationController extends ChangeNotifier {
 
   void signIn() async {
     try {
-      final AuthCredential credential = PhoneAuthProvider.getCredential(
-          verificationId: verificationId, smsCode: otp.text);
-      final firebaseUser = await auth.signInWithCredential(credential);
-      if (firebaseUser.user.uid != null) {
+      final AuthCredential credential =
+          PhoneAuthProvider.credential(verificationId: verificationId!, smsCode: otp!.text);
+      final firebaseUser = await auth!.signInWithCredential(credential);
+      if (firebaseUser.user!.uid != null) {
         var data = {
-          "name": name.text,
-          "email": email.text,
-          "phone": phoneNumber.text,
+          "name": name!.text,
+          "email": email!.text,
+          "phone": phoneNumber!.text,
           "created_at": DateTime.now().millisecondsSinceEpoch,
           "updated_at": DateTime.now().millisecondsSinceEpoch
         };
-        await firestore
-            .collection("user")
-            .document(firebaseUser.user.uid)
-            .setData(data, merge: true);
+        await firestore!.collection("user").doc(firebaseUser.user!.uid).set(data, SetOptions(merge: true));
         sharedPreferences = await SharedPreferences.getInstance();
-        sharedPreferences.setInt("count", 0);
+        sharedPreferences!.setInt("count", 0);
       }
     } catch (error) {
       print("********** ERROR IN SIGN IN $error");
@@ -126,22 +123,19 @@ class AuthenticationController extends ChangeNotifier {
 
   signInWithGoogle() async {
     try {
-      final GoogleSignInAccount googleSignInAccount =
-          await googleSignIn.signIn();
-      final GoogleSignInAuthentication googleSignInAuthentication =
-          await googleSignInAccount.authentication;
-      final AuthCredential credential = GoogleAuthProvider.getCredential(
+      final GoogleSignInAccount? googleSignInAccount = await googleSignIn!.signIn();
+      final GoogleSignInAuthentication googleSignInAuthentication = await googleSignInAccount!.authentication;
+      final AuthCredential credential = GoogleAuthProvider.credential(
         accessToken: googleSignInAuthentication.accessToken,
         idToken: googleSignInAuthentication.idToken,
       );
-      final AuthResult authResult = await auth.signInWithCredential(credential);
-      final FirebaseUser user = authResult.user;
+      final authResult = await auth!.signInWithCredential(credential);
+      final User user = authResult.user!;
       assert(!user.isAnonymous);
-      assert(await user.getIdToken() != null);
-      final FirebaseUser currentUser = await auth.currentUser();
+      final User currentUser = auth!.currentUser!;
       assert(user.uid == currentUser.uid);
       sharedPreferences = await SharedPreferences.getInstance();
-      sharedPreferences.setInt("count", 0);
+      sharedPreferences!.setInt("count", 0);
     } catch (error) {
       print("********** ERROR IN SIGN IN $error");
     }

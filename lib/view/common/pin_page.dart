@@ -1,23 +1,23 @@
 import 'package:block_pay/model/cardModel.dart';
 import 'package:block_pay/model/transactionModel.dart';
 import 'package:block_pay/view/balance/balance.dart';
+import 'package:block_pay/view/constant.dart';
 import 'package:block_pay/view/history/historyPage.dart';
 import 'package:block_pay/view/transfer/transferPage.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
-import 'package:block_pay/view/constant.dart';
 
 class PinPage extends StatefulWidget {
-  PAGES page;
-  List<CardModel> cardModel;
-  List<TransactionModel> transactionModel;
+  PAGES? page;
+  List<CardModel>? cardModel;
+  List<TransactionModel>? transactionModel;
 
-  PinPage({@required this.page,@required List<CardModel> model,@required List<TransactionModel> tModel}){
-    if(model!=null && tModel!=null){
+  PinPage({@required this.page, @required List<CardModel>? model, @required List<TransactionModel>? tModel}) {
+    if (model != null && tModel != null) {
       cardModel = model;
       transactionModel = tModel;
-    }else{
+    } else {
       model = [];
       tModel = [];
     }
@@ -85,20 +85,22 @@ class _PinPageState extends State<PinPage> {
                 Padding(
                   padding: EdgeInsets.only(
                     top: MediaQuery.of(context).size.shortestSide * 0.05,
-                    left: MediaQuery.of(context).size.shortestSide * 0.25,
-                    right: MediaQuery.of(context).size.shortestSide * 0.25,
+                    left: MediaQuery.of(context).size.shortestSide * 0.05,
+                    right: MediaQuery.of(context).size.shortestSide * 0.05,
                   ),
                   child: PinCodeTextField(
-                    obsecureText: true,
+                    pinTheme: PinTheme(
+                      activeColor: Colors.white,
+                      selectedColor: Colors.white,
+                      activeFillColor: Colors.white,
+                      inactiveColor: Colors.white,
+                    ),
+                    appContext: context,
+                    obscureText: true,
+                    keyboardType: TextInputType.number,
                     controller: password,
                     length: 6,
-                    textInputType: TextInputType.number,
-                    selectedColor: Colors.white,
-                    activeColor: Colors.white,
-                    inactiveFillColor: Colors.transparent,
-                    fieldWidth: 14,
                     enableActiveFill: true,
-                    activeFillColor: Colors.white,
                     onChanged: (value) {
                       print(value);
                       print(value.runtimeType);
@@ -108,28 +110,36 @@ class _PinPageState extends State<PinPage> {
                         switch (widget.page) {
                           case PAGES.PAYMENT:
                             Navigator.pushReplacement(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => TransferPage(model: widget.cardModel)));
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => TransferPage(
+                                  model: widget.cardModel!,
+                                ),
+                              ),
+                            );
                             break;
                           case PAGES.BALANCE:
                             Navigator.pushReplacement(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => BalancePage(model: widget.cardModel)));
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => BalancePage(model: widget.cardModel),
+                              ),
+                            );
                             break;
                           case PAGES.HISTORY:
                             Navigator.pushReplacement(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => HistoryPage(model: widget.transactionModel,)));
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => HistoryPage(
+                                  model: widget.transactionModel!,
+                                ),
+                              ),
+                            );
                             break;
                         }
                       }
                     },
-                    shape: PinCodeFieldShape.circle,
                     backgroundColor: Colors.transparent,
-                    inactiveColor: Colors.white,
                     textStyle: GoogleFonts.lato(
                       color: Colors.white,
                     ),
@@ -165,8 +175,7 @@ class _PinPageState extends State<PinPage> {
                   ),
                   GridView(
                     shrinkWrap: true,
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 3, childAspectRatio: 1.5),
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3, childAspectRatio: 1.5),
                     children: <Widget>[
                       Padding(
                         padding: const EdgeInsets.all(8.0),
@@ -181,10 +190,8 @@ class _PinPageState extends State<PinPage> {
                               borderRadius: BorderRadius.circular(15),
 //                          border: Border.all(color: Colors.black12),
                             ),
-                            width:
-                                MediaQuery.of(context).size.shortestSide * 0.05,
-                            height:
-                                MediaQuery.of(context).size.shortestSide * 0.05,
+                            width: MediaQuery.of(context).size.shortestSide * 0.05,
+                            height: MediaQuery.of(context).size.shortestSide * 0.05,
                             child: Center(
                               child: Text(
                                 "1",
@@ -210,10 +217,8 @@ class _PinPageState extends State<PinPage> {
                               borderRadius: BorderRadius.circular(15),
 //                          border: Border.all(color: Colors.black12),
                             ),
-                            width:
-                                MediaQuery.of(context).size.shortestSide * 0.05,
-                            height:
-                                MediaQuery.of(context).size.shortestSide * 0.05,
+                            width: MediaQuery.of(context).size.shortestSide * 0.05,
+                            height: MediaQuery.of(context).size.shortestSide * 0.05,
                             child: Center(
                               child: Text(
                                 "2",
@@ -239,10 +244,8 @@ class _PinPageState extends State<PinPage> {
                               borderRadius: BorderRadius.circular(15),
 //                          border: Border.all(color: Colors.black12),
                             ),
-                            width:
-                                MediaQuery.of(context).size.shortestSide * 0.05,
-                            height:
-                                MediaQuery.of(context).size.shortestSide * 0.05,
+                            width: MediaQuery.of(context).size.shortestSide * 0.05,
+                            height: MediaQuery.of(context).size.shortestSide * 0.05,
                             child: Center(
                               child: Text(
                                 "3",
@@ -268,10 +271,8 @@ class _PinPageState extends State<PinPage> {
                               borderRadius: BorderRadius.circular(15),
 //                          border: Border.all(color: Colors.black12),
                             ),
-                            width:
-                                MediaQuery.of(context).size.shortestSide * 0.05,
-                            height:
-                                MediaQuery.of(context).size.shortestSide * 0.05,
+                            width: MediaQuery.of(context).size.shortestSide * 0.05,
+                            height: MediaQuery.of(context).size.shortestSide * 0.05,
                             child: Center(
                               child: Text(
                                 "4",
@@ -297,10 +298,8 @@ class _PinPageState extends State<PinPage> {
                               borderRadius: BorderRadius.circular(15),
 //                          border: Border.all(color: Colors.black12),
                             ),
-                            width:
-                                MediaQuery.of(context).size.shortestSide * 0.05,
-                            height:
-                                MediaQuery.of(context).size.shortestSide * 0.05,
+                            width: MediaQuery.of(context).size.shortestSide * 0.05,
+                            height: MediaQuery.of(context).size.shortestSide * 0.05,
                             child: Center(
                               child: Text(
                                 "5",
@@ -326,10 +325,8 @@ class _PinPageState extends State<PinPage> {
                               borderRadius: BorderRadius.circular(15),
 //                          border: Border.all(color: Colors.black12),
                             ),
-                            width:
-                                MediaQuery.of(context).size.shortestSide * 0.05,
-                            height:
-                                MediaQuery.of(context).size.shortestSide * 0.05,
+                            width: MediaQuery.of(context).size.shortestSide * 0.05,
+                            height: MediaQuery.of(context).size.shortestSide * 0.05,
                             child: Center(
                               child: Text(
                                 "6",
@@ -355,10 +352,8 @@ class _PinPageState extends State<PinPage> {
                               borderRadius: BorderRadius.circular(15),
 //                          border: Border.all(color: Colors.black12),
                             ),
-                            width:
-                                MediaQuery.of(context).size.shortestSide * 0.05,
-                            height:
-                                MediaQuery.of(context).size.shortestSide * 0.05,
+                            width: MediaQuery.of(context).size.shortestSide * 0.05,
+                            height: MediaQuery.of(context).size.shortestSide * 0.05,
                             child: Center(
                               child: Text(
                                 "7",
@@ -384,10 +379,8 @@ class _PinPageState extends State<PinPage> {
                               borderRadius: BorderRadius.circular(15),
 //                          border: Border.all(color: Colors.black12),
                             ),
-                            width:
-                                MediaQuery.of(context).size.shortestSide * 0.05,
-                            height:
-                                MediaQuery.of(context).size.shortestSide * 0.05,
+                            width: MediaQuery.of(context).size.shortestSide * 0.05,
+                            height: MediaQuery.of(context).size.shortestSide * 0.05,
                             child: Center(
                               child: Text(
                                 "8",
@@ -413,10 +406,8 @@ class _PinPageState extends State<PinPage> {
                               borderRadius: BorderRadius.circular(15),
 //                          border: Border.all(color: Colors.black12),
                             ),
-                            width:
-                                MediaQuery.of(context).size.shortestSide * 0.05,
-                            height:
-                                MediaQuery.of(context).size.shortestSide * 0.05,
+                            width: MediaQuery.of(context).size.shortestSide * 0.05,
+                            height: MediaQuery.of(context).size.shortestSide * 0.05,
                             child: Center(
                               child: Text(
                                 "9",
@@ -437,10 +428,8 @@ class _PinPageState extends State<PinPage> {
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(15),
                             ),
-                            width:
-                                MediaQuery.of(context).size.shortestSide * 0.05,
-                            height:
-                                MediaQuery.of(context).size.shortestSide * 0.05,
+                            width: MediaQuery.of(context).size.shortestSide * 0.05,
+                            height: MediaQuery.of(context).size.shortestSide * 0.05,
                           ),
                         ),
                       ),
@@ -457,10 +446,8 @@ class _PinPageState extends State<PinPage> {
                               borderRadius: BorderRadius.circular(15),
 //                          border: Border.all(color: Colors.black12),
                             ),
-                            width:
-                                MediaQuery.of(context).size.shortestSide * 0.05,
-                            height:
-                                MediaQuery.of(context).size.shortestSide * 0.05,
+                            width: MediaQuery.of(context).size.shortestSide * 0.05,
+                            height: MediaQuery.of(context).size.shortestSide * 0.05,
                             child: Center(
                               child: Text(
                                 "0",
@@ -478,10 +465,8 @@ class _PinPageState extends State<PinPage> {
                         child: GestureDetector(
                           onTap: () {
                             setState(() {
-                              if (password.text != null &&
-                                  password.text.length > 0) {
-                                password.text = password.text
-                                    .substring(0, password.text.length - 1);
+                              if (password.text != null && password.text.length > 0) {
+                                password.text = password.text.substring(0, password.text.length - 1);
                               }
                             });
                           },
@@ -494,10 +479,8 @@ class _PinPageState extends State<PinPage> {
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(15),
                             ),
-                            width:
-                                MediaQuery.of(context).size.shortestSide * 0.05,
-                            height:
-                                MediaQuery.of(context).size.shortestSide * 0.05,
+                            width: MediaQuery.of(context).size.shortestSide * 0.05,
+                            height: MediaQuery.of(context).size.shortestSide * 0.05,
                             child: Center(
                                 child: Icon(
                               Icons.backspace,

@@ -1,14 +1,13 @@
 import 'package:block_pay/controller/history_controller.dart';
-import 'package:block_pay/model/cardModel.dart';
 import 'package:block_pay/model/transactionModel.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
 class HistoryPage extends StatefulWidget {
-  List<TransactionModel> card;
+  List<TransactionModel>? card;
 
-  HistoryPage({@required List<TransactionModel> model}) {
+  HistoryPage({@required List<TransactionModel>? model}) {
     if (model != null) {
       card = model;
     } else {
@@ -80,18 +79,18 @@ class _HistoryPageState extends State<HistoryPage> {
                     ),
                     child: (historyController.transaction.length > 0)
                         ? ListView.builder(
-                            itemCount: widget.card.length,
-                            itemBuilder: (context, index) {
-                              return Card(
-                                elevation: 8.0,
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(25),
-                                  ),
-                                  child: ListTile(
-                                    dense: true,
-                                    leading: Container(
-                                      alignment: Alignment.center,
+                      itemCount: widget.card!.length,
+                          itemBuilder: (context, index) {
+                            return Card(
+                              elevation: 8.0,
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(25),
+                                ),
+                                child: ListTile(
+                                  dense: true,
+                                  leading: Container(
+                                    alignment: Alignment.center,
                                       width:
                                           MediaQuery.of(context).size.shortestSide *
                                               0.1,
@@ -114,19 +113,19 @@ class _HistoryPageState extends State<HistoryPage> {
                                       ),
                                     ),
                                     title: Text(
-                                      "${widget.card[index].data.holderName}",
-                                      style: GoogleFonts.lato(
-                                        color: Colors.black,
-                                        fontSize: 18,
-                                      ),
+                                      "${widget.card![index].data!.holderName}",
+                                    style: GoogleFonts.lato(
+                                      color: Colors.black,
+                                      fontSize: 18,
                                     ),
+                                  ),
                                     subtitle: Text(
-                                      "${widget.card[index].hash}",
-                                      style: GoogleFonts.roboto(
-                                        color: Colors.grey,
-                                        fontSize: 14,
-                                      ),
+                                      "${widget.card![index].hash}",
+                                    style: GoogleFonts.roboto(
+                                      color: Colors.grey,
+                                      fontSize: 14,
                                     ),
+                                  ),
                                   ),
                                 ),
                               );

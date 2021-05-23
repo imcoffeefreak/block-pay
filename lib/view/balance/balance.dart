@@ -6,15 +6,16 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
 class BalancePage extends StatefulWidget {
-  List<CardModel> cardModel;
+  List<CardModel>? cardModel;
 
-  BalancePage({ List<CardModel> model}){
-    if(model!=null){
+  BalancePage({List<CardModel>? model}) {
+    if (model != null) {
       cardModel = model;
-    }else{
+    } else {
       model = [];
     }
   }
+
   @override
   _BalancePageState createState() => _BalancePageState();
 }
@@ -42,7 +43,7 @@ class _BalancePageState extends State<BalancePage> {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider<BalanceController>(
-      create: (context)=>BalanceController(cardData: widget.cardModel.first.data),
+      create: (context) => BalanceController(cardData: widget.cardModel!.first.data),
       child: Scaffold(
         body: Stack(
           children: <Widget>[
@@ -118,15 +119,17 @@ class _BalancePageState extends State<BalancePage> {
                         child: Stack(
                           children: <Widget>[
                             PageView.builder(
-                              itemCount: widget.cardModel.length,
-                              itemBuilder: (context, index) {
-                                return AtmCards(data: widget.cardModel[index].data,);
-                              },
-                              onPageChanged: (int page) {
-                                getChangedPageAndMoveBar(page);
-                                balanceController.changeCard(model: widget.cardModel[page].data);
-                              },
-                            ),
+                              itemCount: widget.cardModel!.length,
+                            itemBuilder: (context, index) {
+                              return AtmCards(
+                                data: widget.cardModel![index].data,
+                              );
+                            },
+                            onPageChanged: (int page) {
+                              getChangedPageAndMoveBar(page);
+                              balanceController.changeCard(model: widget.cardModel![page].data);
+                            },
+                          ),
                             Stack(
                               children: <Widget>[
                                 Padding(
@@ -138,11 +141,8 @@ class _BalancePageState extends State<BalancePage> {
                                         mainAxisSize: MainAxisSize.min,
                                         mainAxisAlignment: MainAxisAlignment.center,
                                         children: <Widget>[
-                                          for (int i = 0; i < widget.cardModel.length; i++)
-                                            if (i == currentPageValue) ...[
-                                              circleBar(true)
-                                            ] else
-                                              circleBar(false),
+                                          for (int i = 0; i < widget.cardModel!.length; i++)
+                                          if (i == currentPageValue) ...[circleBar(true)] else circleBar(false),
                                         ],
                                       ),
                                     ),
@@ -203,14 +203,14 @@ class _BalancePageState extends State<BalancePage> {
                           Consumer<BalanceController>(
                             builder: (context, balanceController,_) {
                               return Text(
-                                "${balanceController.cardData.amountAvailable}",
-                                style: GoogleFonts.roboto(
-                                  color: Colors.black,
-                                  fontSize: 50,
-                                  fontWeight: FontWeight.bold,
-                                  fontStyle: FontStyle.italic,
-                                ),
-                              );
+                                "${balanceController.cardData!.amountAvailable}",
+                              style: GoogleFonts.roboto(
+                                color: Colors.black,
+                                fontSize: 50,
+                                fontWeight: FontWeight.bold,
+                                fontStyle: FontStyle.italic,
+                              ),
+                            );
                             }
                           ),
                         ],

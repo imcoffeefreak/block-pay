@@ -211,7 +211,7 @@ class _AuthenticationState extends State<Authentication> {
                                             0.05,
                                       ),
                                       child: Text(
-                                        "Enter OTP sent to +91 ${authenticationController.phoneNumber.text}",
+                                        "Enter OTP sent to +91 ${authenticationController.phoneNumber!.text}",
                                         style: GoogleFonts.lato(
                                           color: Colors.black,
                                           fontWeight: FontWeight.bold,
@@ -535,13 +535,13 @@ class _AuthenticationState extends State<Authentication> {
                                 0.05,
                           ),
                           child: Text(
-                            "Enter OTP sent to +91 ${authenticationController.phoneNumber.text}",
-                            style: GoogleFonts.lato(
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 18,
-                            ),
-                          ),
+                            "Enter OTP sent to +91 ${authenticationController.phoneNumber!.text}",
+                                        style: GoogleFonts.lato(
+                                          color: Colors.black,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 18,
+                                        ),
+                                      ),
                         )
                             : Container(),
                         (authenticationController.isPhoneValid)

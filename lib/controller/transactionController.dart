@@ -6,35 +6,35 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 class TransactionController extends ChangeNotifier {
-  TextEditingController accountNumber;
-  TextEditingController ifscCode;
-  TextEditingController receiverName;
-  TextEditingController mobileNumber;
-  TextEditingController amount;
-  card.Data cardData;
+  TextEditingController? accountNumber;
+  TextEditingController? ifscCode;
+  TextEditingController? receiverName;
+  TextEditingController? mobileNumber;
+  TextEditingController? amount;
+  card.Data? cardData;
   bool isTransfered = false;
-  FirebaseAuth auth;
+  FirebaseAuth? auth;
 
-  TransactionController({@required card.Data card}) {
+  TransactionController({@required card.Data? card}) {
     auth = FirebaseAuth.instance;
     accountNumber = TextEditingController();
     ifscCode = TextEditingController();
     receiverName = TextEditingController();
     mobileNumber = TextEditingController();
     amount = TextEditingController();
-    changeCardDetails(card: card);
+    changeCardDetails(card: card!);
   }
 
   sendMoneyToAccount() async {
     try {
-      var firebaseUser = await auth.currentUser();
+      var firebaseUser = auth!.currentUser;
       var transaction = model.Data(
-        amount: int.parse(amount.text),
-        sentFrom: "${cardData.cardNumber}",
-        sentTo: "${accountNumber.text}",
-        ifsc: "${ifscCode.text}",
-        holderName: "${receiverName.text}",
-        userId: firebaseUser.uid,
+        amount: int.parse(amount!.text),
+        sentFrom: "${cardData!.cardNumber}",
+        sentTo: "${accountNumber!.text}",
+        ifsc: "${ifscCode!.text}",
+        holderName: "${receiverName!.text}",
+        userId: firebaseUser!.uid,
         isSuccess: true,
         isFailure: false,
       );
@@ -52,14 +52,14 @@ class TransactionController extends ChangeNotifier {
 
   sendMoneyToMobile() async {
     try {
-      var firebaseUser = await auth.currentUser();
+      var firebaseUser = auth!.currentUser;
       var transaction = model.Data(
-        amount: int.parse(amount.text),
-        sentFrom: "${cardData.cardNumber}",
-        sentTo: "${mobileNumber.text}",
+        amount: int.parse(amount!.text),
+        sentFrom: "${cardData!.cardNumber}",
+        sentTo: "${mobileNumber!.text}",
         ifsc: "",
         holderName: "",
-        userId: firebaseUser.uid,
+        userId: firebaseUser!.uid,
         isSuccess: true,
         isFailure: false,
       );
@@ -73,7 +73,7 @@ class TransactionController extends ChangeNotifier {
     } catch (e) {}
   }
 
-  changeCardDetails({card.Data card}) {
+  changeCardDetails({card.Data? card}) {
     if (card != null) {
       cardData = card;
     }
@@ -81,10 +81,10 @@ class TransactionController extends ChangeNotifier {
   }
 
   clearAllController() {
-    accountNumber.clear();
-    ifscCode.clear();
-    receiverName.clear();
-    mobileNumber.clear();
-    amount.clear();
+    accountNumber!.clear();
+    ifscCode!.clear();
+    receiverName!.clear();
+    mobileNumber!.clear();
+    amount!.clear();
   }
 }

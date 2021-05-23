@@ -3,14 +3,12 @@ import 'package:block_pay/model/cardModel.dart';
 import 'package:block_pay/view/atmCards/atmCards.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:lite_rolling_switch/lite_rolling_switch.dart';
-import 'package:progress_dialog/progress_dialog.dart';
 import 'package:provider/provider.dart';
 
 class TransferPage extends StatefulWidget {
-  List<CardModel> cardModel;
+  List<CardModel>? cardModel;
 
-  TransferPage({@required List<CardModel> model}) {
+  TransferPage({@required List<CardModel>? model}) {
     if (model != null) {
       cardModel = model;
     } else {
@@ -25,12 +23,10 @@ class TransferPage extends StatefulWidget {
 class _TransferPageState extends State<TransferPage> {
   int currentPageValue = 0;
   bool switched = true;
-  ProgressDialog progressDialog;
 
   @override
   initState(){
     super.initState();
-    progressDialog = ProgressDialog(context);
   }
 
   Widget circleBar(bool isActive) {
@@ -53,8 +49,7 @@ class _TransferPageState extends State<TransferPage> {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider<TransactionController>(
-      create: (context) =>
-          TransactionController(card: widget.cardModel.first.data),
+      create: (context) => TransactionController(card: widget.cardModel!.first.data),
       child: Scaffold(
         body: Stack(
           children: <Widget>[
@@ -126,16 +121,15 @@ class _TransferPageState extends State<TransferPage> {
                       child: Stack(
                         children: <Widget>[
                           PageView.builder(
-                            itemCount: widget.cardModel.length,
+                            itemCount: widget.cardModel!.length,
                             itemBuilder: (context, index) {
                               return AtmCards(
-                                data: widget.cardModel[index].data,
+                                data: widget.cardModel![index].data,
                               );
                             },
                             onPageChanged: (int page) {
                               getChangedPageAndMoveBar(page);
-                              transactionController.changeCardDetails(
-                                  card: widget.cardModel[page].data);
+                              transactionController.changeCardDetails(card: widget.cardModel![page].data);
                             },
                           ),
                           Stack(
@@ -150,11 +144,8 @@ class _TransferPageState extends State<TransferPage> {
                                       mainAxisAlignment:
                                           MainAxisAlignment.center,
                                       children: <Widget>[
-                                        for (int i = 0; i < widget.cardModel.length; i++)
-                                          if (i == currentPageValue) ...[
-                                            circleBar(true)
-                                          ] else
-                                            circleBar(false),
+                                        for (int i = 0; i < widget.cardModel!.length; i++)
+                                          if (i == currentPageValue) ...[circleBar(true)] else circleBar(false),
                                       ],
                                     ),
                                   ),
@@ -435,17 +426,9 @@ class _TransferPageState extends State<TransferPage> {
                                                     ),
                                                     child: GestureDetector(
                                                       onTap: () async {
-                                                        progressDialog.style(
-                                                          message: "Transfering please wait.....",
-                                                          progressWidget: CircularProgressIndicator(
-                                                            backgroundColor: Color(0XFF152562),
-                                                          ),
-                                                        );
-                                                        progressDialog.show();
                                                         int code = await transactionController
                                                             .sendMoneyToAccount();
                                                         if(code == 200){
-                                                          progressDialog.hide();
                                                           Navigator.pop(context);
                                                         }
                                                       },
@@ -609,117 +592,79 @@ class _TransferPageState extends State<TransferPage> {
                                                   ),
                                                 ],
                                                 shape: RoundedRectangleBorder(
-                                                  borderRadius:
-                                                      BorderRadius.circular(
+                                                  borderRadius: BorderRadius.circular(
                                                     25,
                                                   ),
                                                 ),
-                                                content: ListView(
-                                                  shrinkWrap: true,
-                                                  children: <Widget>[
-                                                    Padding(
-                                                      padding:
-                                                          const EdgeInsets.only(
-                                                        left: 8.0,
-                                                        right: 8.0,
-                                                        bottom: 8.0,
-                                                        top: 30.0,
-                                                      ),
-                                                      child: TextFormField(
-                                                        controller:
-                                                            transactionController
-                                                                .amount,
-                                                        keyboardType:
-                                                            TextInputType
-                                                                .number,
-                                                        decoration:
-                                                            InputDecoration(
-                                                          border:
-                                                              OutlineInputBorder(
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                              25,
-                                                            ),
-                                                          ),
-                                                          hintText: "Amount",
-                                                          filled: true,
-                                                          fillColor:
-                                                              Colors.white,
-                                                          hintStyle: GoogleFonts
-                                                              .roboto(
-                                                            fontSize: 20,
-                                                            color: Color(
-                                                              0XFF39449D,
-                                                            ),
-                                                          ),
+                                                content: Container(
+                                                  width: MediaQuery.of(context).size.width * 0.3,
+                                                  child: ListView(
+                                                    shrinkWrap: true,
+                                                    children: <Widget>[
+                                                      Padding(
+                                                        padding: const EdgeInsets.only(
+                                                          left: 8.0,
+                                                          right: 8.0,
+                                                          bottom: 8.0,
+                                                          top: 30.0,
                                                         ),
-                                                      ),
-                                                    ),
-                                                    Padding(
-                                                      padding: EdgeInsets.only(
-                                                          left: MediaQuery.of(
-                                                                      context)
-                                                                  .size
-                                                                  .shortestSide *
-                                                              0.15,
-                                                          right: MediaQuery.of(
-                                                                      context)
-                                                                  .size
-                                                                  .shortestSide *
-                                                              0.15),
-                                                      child: GestureDetector(
-                                                        onTap: () async {
-                                                          progressDialog.style(
-                                                            message: "Transfering please wait.....",
-                                                            progressWidget: CircularProgressIndicator(
-                                                              backgroundColor: Color(0XFF152562),
+                                                        child: TextFormField(
+                                                          controller: transactionController.amount,
+                                                          keyboardType: TextInputType.number,
+                                                          decoration: InputDecoration(
+                                                            border: OutlineInputBorder(
+                                                              borderRadius: BorderRadius.circular(
+                                                                25,
+                                                              ),
                                                             ),
-                                                          );
-                                                          progressDialog.show();
-                                                          int code = await transactionController
-                                                              .sendMoneyToMobile();
-                                                          if(code == 200){
-                                                            progressDialog.hide();
-                                                            Navigator.pop(context);
-                                                          }
-                                                        },
-                                                        child: Card(
-                                                          elevation: 5.0,
-                                                          shape:
-                                                              RoundedRectangleBorder(
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        25),
-                                                          ),
-                                                          child: Container(
-                                                            alignment: Alignment
-                                                                .center,
-                                                            height: 40,
-                                                            decoration:
-                                                                BoxDecoration(
+                                                            hintText: "Amount",
+                                                            filled: true,
+                                                            fillColor: Colors.white,
+                                                            hintStyle: GoogleFonts.roboto(
+                                                              fontSize: 20,
                                                               color: Color(
-                                                                  0XFF39449D),
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .circular(
-                                                                          25),
-                                                            ),
-                                                            child: Text(
-                                                              "Transfer",
-                                                              style: GoogleFonts
-                                                                  .roboto(
-                                                                fontSize: 18,
-                                                                color: Colors
-                                                                    .white,
+                                                                0XFF39449D,
                                                               ),
                                                             ),
                                                           ),
                                                         ),
                                                       ),
-                                                    ),
-                                                  ],
+                                                      Padding(
+                                                        padding: EdgeInsets.only(
+                                                            left: MediaQuery.of(context).size.shortestSide * 0.15,
+                                                            right: MediaQuery.of(context).size.shortestSide * 0.15),
+                                                        child: GestureDetector(
+                                                          onTap: () async {
+                                                            int code = await transactionController.sendMoneyToMobile();
+                                                            if (code == 200) {
+                                                              Navigator.pop(context);
+                                                            }
+                                                          },
+                                                          child: Card(
+                                                            elevation: 5.0,
+                                                            shape: RoundedRectangleBorder(
+                                                              borderRadius: BorderRadius.circular(25),
+                                                            ),
+                                                            child: Container(
+                                                              alignment: Alignment.center,
+                                                              height: 40,
+                                                              decoration: BoxDecoration(
+                                                                color: Color(0XFF39449D),
+                                                                borderRadius: BorderRadius.circular(25),
+                                                              ),
+                                                              child: Text(
+                                                                "Transfer",
+                                                                style: GoogleFonts.roboto(
+                                                                  fontSize: 18,
+                                                                  color: Colors.white,
+                                                                ),
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
                                                 ),
                                               );
                                             }).then((value){

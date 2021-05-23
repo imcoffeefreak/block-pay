@@ -4,7 +4,6 @@ import 'package:block_pay/view/common/pin_page.dart';
 import 'package:block_pay/view/constant.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 
 class HomePage extends StatefulWidget {
@@ -245,15 +244,13 @@ class _HomePageState extends State<HomePage> {
                                           ),
                                         ),
                                         Text(
-                                          "${homePageController.cardDetails.first.data.holderName}",
-                                          style:
-                                          GoogleFonts.inconsolata(
-                                            color: Colors.white,
-                                            fontSize: 18,
-                                            fontWeight:
-                                            FontWeight.bold,
-                                          ),
-                                        ),
+                                          "${homePageController.cardDetails.first.data!.holderName}",
+                                                    style: GoogleFonts.inconsolata(
+                                                      color: Colors.white,
+                                                      fontSize: 18,
+                                                      fontWeight: FontWeight.bold,
+                                                    ),
+                                                  ),
                                         Column(
                                           crossAxisAlignment:
                                           CrossAxisAlignment
@@ -268,15 +265,13 @@ class _HomePageState extends State<HomePage> {
                                               ),
                                             ),
                                             Text(
-                                              "**** **** **** ${homePageController.cardDetails.first.data.cardNumber.substring(15)}",
-                                              style: GoogleFonts
-                                                  .inconsolata(
-                                                color: Colors.white,
-                                                fontSize: 18,
-                                                fontWeight:
-                                                FontWeight.bold,
-                                              ),
-                                            ),
+                                              "**** **** **** ${homePageController.cardDetails.first.data!.cardNumber!.substring(15)}",
+                                                        style: GoogleFonts.inconsolata(
+                                                          color: Colors.white,
+                                                          fontSize: 18,
+                                                          fontWeight: FontWeight.bold,
+                                                        ),
+                                                      ),
                                           ],
                                         ),
                                         Row(
@@ -299,26 +294,22 @@ class _HomePageState extends State<HomePage> {
                                                   width: 2,
                                                 ),
                                                 Text(
-                                                  "${homePageController.cardDetails.first.data.amountAvailable}",
-                                                  style: GoogleFonts
-                                                      .roboto(
-                                                    color:
-                                                    Colors.white,
-                                                    fontSize: 16,
-                                                  ),
-                                                ),
+                                                  "${homePageController.cardDetails.first.data!.amountAvailable}",
+                                                            style: GoogleFonts.roboto(
+                                                              color: Colors.white,
+                                                              fontSize: 16,
+                                                            ),
+                                                          ),
                                               ],
                                             ),
                                             Text(
-                                              "${homePageController.cardDetails.first.data.cardType}",
-                                              style: GoogleFonts
-                                                  .inconsolata(
-                                                color: Colors.white,
-                                                fontSize: 20,
-                                                fontWeight:
-                                                FontWeight.bold,
-                                              ),
-                                            ),
+                                              "${homePageController.cardDetails.first.data!.cardType}",
+                                                        style: GoogleFonts.inconsolata(
+                                                          color: Colors.white,
+                                                          fontSize: 20,
+                                                          fontWeight: FontWeight.bold,
+                                                        ),
+                                                      ),
                                           ],
                                         )
                                       ],
@@ -625,18 +616,16 @@ class _HomePageState extends State<HomePage> {
                                                 MainAxisAlignment.spaceBetween,
                                             children: <Widget>[
                                               Text(
-                                                "${homePageController.transaction[index].timestamp.split(' ')[1]}",
-                                                style:
-                                                    GoogleFonts.robotoCondensed(
+                                                "${homePageController.transaction[index].timestamp!.split(' ')[1]}",
+                                                style: GoogleFonts.robotoCondensed(
                                                   fontSize: 16,
                                                   color: Colors.black,
                                                   fontWeight: FontWeight.bold,
                                                 ),
                                               ),
                                               Text(
-                                                "${homePageController.transaction[index].timestamp.split(' ')[2]}/${homePageController.transaction[index].timestamp.split(' ')[1]}/${homePageController.transaction[index].timestamp.split(' ')[3]}",
-                                                style:
-                                                    GoogleFonts.robotoCondensed(
+                                                "${homePageController.transaction[index].timestamp!.split(' ')[2]}/${homePageController.transaction[index].timestamp!.split(' ')[1]}/${homePageController.transaction[index].timestamp!.split(' ')[3]}",
+                                                style: GoogleFonts.robotoCondensed(
                                                   fontSize: 14,
                                                   color: Colors.black,
                                                 ),
@@ -659,27 +648,12 @@ class _HomePageState extends State<HomePage> {
                                                 ),
                                               ),
                                               Text(
-                                                (homePageController
-                                                        .transaction[index]
-                                                        .data
-                                                        .isSuccess)
-                                                    ? "Success"
-                                                    : "Failure",
-                                                style:
-                                                    GoogleFonts.robotoCondensed(
-                                                  fontSize: 16,
-                                                  color: (homePageController
-                                                          .transaction[index]
-                                                          .data
-                                                          .isSuccess)
-                                                      ? Colors.blue
-                                                      : Colors.red,
-                                                ),
+                                                "Success",
+                                                style: GoogleFonts.robotoCondensed(fontSize: 16, color: Colors.blue),
                                               ),
                                               Text(
-                                                "Amount \u20B9 ${homePageController.transaction[index].data.amount}",
-                                                style:
-                                                    GoogleFonts.robotoCondensed(
+                                                "Amount \u20B9 ${homePageController.transaction[index].data!.amount}",
+                                                style: GoogleFonts.robotoCondensed(
                                                   fontSize: 16,
                                                   color: Colors.grey,
                                                 ),

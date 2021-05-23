@@ -81,13 +81,10 @@ class _AuthenticationV2State extends State<AuthenticationV2> {
                             child: SignInButton(
                               Buttons.Google,
                               onPressed: () async {
-                                await authenticationController
-                                    .signInWithGoogle();
-                                var user = await authenticationController.auth
-                                    .currentUser();
+                                await authenticationController.signInWithGoogle();
+                                var user = authenticationController.auth!.currentUser;
                                 if (user != null) {
-                                  Navigator.pushReplacementNamed(
-                                      context, "/");
+                                  Navigator.pushReplacementNamed(context, "/");
                                 }
                               },
                               shape: RoundedRectangleBorder(

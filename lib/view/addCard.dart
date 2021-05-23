@@ -1,10 +1,9 @@
 import 'package:block_pay/controller/homePageController.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:progress_dialog/progress_dialog.dart';
 import 'package:provider/provider.dart';
+
 import 'constant.dart';
-import 'package:bot_toast/bot_toast.dart';
 
 class AddCard extends StatefulWidget {
   @override
@@ -13,13 +12,11 @@ class AddCard extends StatefulWidget {
 
 class _AddCardState extends State<AddCard> {
   final _formKey = GlobalKey<FormState>();
-  ProgressDialog progressDialog;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    progressDialog = ProgressDialog(context);
   }
 
   @override
@@ -99,7 +96,7 @@ class _AddCardState extends State<AddCard> {
                           MediaQuery.of(context).size.shortestSide * 0.05),
                       child: TextFormField(
                         validator: (value) {
-                          if (value.isEmpty || value.trim().length <= 0) {
+                          if (value!.isEmpty || value.trim().length <= 0) {
                             return "holders name required";
                           }
                           return null;
@@ -140,7 +137,7 @@ class _AddCardState extends State<AddCard> {
                           MediaQuery.of(context).size.shortestSide * 0.05),
                       child: TextFormField(
                         validator: (value) {
-                          if (value.isEmpty || value.trim().length <= 0) {
+                          if (value!.isEmpty || value.trim().length <= 0) {
                             return "card number required";
                           }
                           return null;
@@ -186,7 +183,7 @@ class _AddCardState extends State<AddCard> {
                           MediaQuery.of(context).size.shortestSide * 0.05),
                       child: TextFormField(
                         validator: (value) {
-                          if (value.isEmpty || value.trim().length <= 0) {
+                          if (value!.isEmpty || value.trim().length <= 0) {
                             return "expiry date is required";
                           }
                           return null;
@@ -230,9 +227,9 @@ class _AddCardState extends State<AddCard> {
                     Padding(
                       padding: EdgeInsets.all(
                           MediaQuery.of(context).size.shortestSide * 0.05),
-                      child: DropdownButtonFormField(
+                      child: DropdownButtonFormField<String>(
                         validator: (value) {
-                          if (value.isEmpty || value.trim().length <= 0) {
+                          if (value!.isEmpty || value.trim().length <= 0) {
                             return "card type required";
                           }
                           return null;
@@ -269,7 +266,7 @@ class _AddCardState extends State<AddCard> {
                           );
                         }).toList(),
                         onChanged: (cardType) {
-                          controller.selectCard(cardType);
+                          controller.selectCard(cardType!);
                         },
                       ),
                     ),
@@ -291,7 +288,7 @@ class _AddCardState extends State<AddCard> {
                           MediaQuery.of(context).size.shortestSide * 0.05),
                       child: TextFormField(
                         validator: (value) {
-                          if (value.isEmpty || value.trim().length <= 0) {
+                          if (value!.isEmpty || value.trim().length <= 0) {
                             return "amount required";
                           }
                           return null;
@@ -324,21 +321,9 @@ class _AddCardState extends State<AddCard> {
                           MediaQuery.of(context).size.shortestSide * 0.05),
                       child: GestureDetector(
                         onTap: () async {
-                          if (_formKey.currentState.validate()) {
-                            progressDialog.style(
-                              message: "Adding Card ...",
-                              progressWidget: Container(
-                                child: CircularProgressIndicator(
-                                  backgroundColor:  Color(0XFF152562),
-                                ),
-                                width: 100,
-                                height: 100,
-                              ),
-                            );
-                            progressDialog.show();
+                          if (_formKey.currentState!.validate()) {
                             var statusCode = await controller.addCard();
                             if (statusCode == 200) {
-                              progressDialog.hide();
                               Navigator.pop(context);
                             }
                           }

@@ -1,12 +1,15 @@
 import 'package:block_pay/generatedRoutes.dart';
-import 'package:block_pay/view/authentication.dart';
-import 'package:block_pay/view/home_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-void main() => runApp(MyApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+  runApp(MyApp());
+}
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
@@ -47,8 +50,8 @@ class Transition extends StatefulWidget {
 }
 
 class _TransitionState extends State<Transition> {
-  SharedPreferences sharedPreferences;
-  FirebaseAuth auth;
+  SharedPreferences? sharedPreferences;
+  FirebaseAuth? auth;
 
   @override
   void initState() {
@@ -62,15 +65,15 @@ class _TransitionState extends State<Transition> {
     try{
       int count = 0;
       sharedPreferences = await SharedPreferences.getInstance();
-      count = sharedPreferences.getInt("count");
-      var user = await auth.currentUser();
-      if(count==null){
+      count = sharedPreferences!.getInt("count")!;
+      var user = auth!.currentUser;
+      if (count == null) {
         Navigator.pushReplacementNamed(context, "/auth");
-      }else{
-        if(user!=null){
-          sharedPreferences.setInt("count", count+1);
+      } else {
+        if (user != null) {
+          sharedPreferences!.setInt("count", count + 1);
           Navigator.pushReplacementNamed(context, "/");
-        }else{
+        } else {
           Navigator.pushReplacementNamed(context, "/auth");
         }
       }

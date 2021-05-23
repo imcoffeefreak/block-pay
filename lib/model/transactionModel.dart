@@ -1,20 +1,14 @@
 class TransactionModel {
-  int blockNumber;
-  String previousHash;
-  Data data;
-  String timestamp;
-  String hash;
-  String userId;
+  int? blockNumber;
+  String? previousHash;
+  Data? data;
+  String? timestamp;
+  String? hash;
+  String? userId;
 
-  TransactionModel(
-      {this.blockNumber,
-        this.previousHash,
-        this.data,
-        this.userId,
-        this.timestamp,
-        this.hash});
+  TransactionModel({this.blockNumber, this.previousHash, this.data, this.userId, this.timestamp, this.hash});
 
-  TransactionModel.fromJson(Map<String, dynamic> json,String userId) {
+  TransactionModel.fromJson(Map<String, dynamic> json, String userId) {
     if(json['userId'] == userId){
       blockNumber = json['blockNumber'];
       previousHash = json['previousHash'];
@@ -30,7 +24,7 @@ class TransactionModel {
     data['blockNumber'] = this.blockNumber;
     data['previousHash'] = this.previousHash;
     if (this.data != null) {
-      data['data'] = this.data.toJson();
+      data['data'] = this.data!.toJson();
     }
     data['timestamp'] = this.timestamp;
     data['hash'] = this.hash;
@@ -39,16 +33,24 @@ class TransactionModel {
 }
 
 class Data {
-  int amount;
-  String ifsc;
-  String sentFrom;
-  String sentTo;
-  String holderName;
-  String userId;
-  bool isSuccess;
-  bool isFailure;
+  int? amount;
+  String? ifsc;
+  String? sentFrom;
+  String? sentTo;
+  String? holderName;
+  String? userId;
+  bool? isSuccess;
+  bool? isFailure;
 
-  Data({this.amount, this.ifsc, this.sentFrom, this.sentTo, this.holderName,this.isFailure,this.isSuccess,this.userId});
+  Data(
+      {this.amount,
+      this.ifsc,
+      this.sentFrom,
+      this.sentTo,
+      this.holderName,
+      this.isFailure,
+      this.isSuccess,
+      this.userId});
 
   Data.fromJson(Map<String, dynamic> json) {
     amount = json['amount'];
