@@ -22,17 +22,6 @@
 <script src="https://www.gstatic.com/firebasejs/8.4.3/firebase-storage.js"></script>
 
 <script>
-      const firebaseConfig = {
-        apiKey: "AIzaSyBPWSFoLdQ7MInarEUS3LdG26L47FfxKu4",
-        authDomain: "blockchain-5bfff.firebaseapp.com",
-        databaseURL: "https://blockchain-5bfff.firebaseio.com",
-        projectId: "blockchain-5bfff",
-        storageBucket: "blockchain-5bfff.appspot.com",
-        messagingSenderId: "826051794200",
-        appId: "1:826051794200:web:7eb4c7b05c16b904aa3a6d",
-        measurementId: "G-GJZB0SYXCX"
-      };
-    firebase.initializeApp(firebaseConfig);
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', function () {
         navigator.serviceWorker.register('/flutter_service_worker.js');
