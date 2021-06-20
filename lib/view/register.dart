@@ -4,12 +4,12 @@ import 'package:flutter_signin_button/flutter_signin_button.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
-class AuthenticationV2 extends StatefulWidget {
+class RegisterUser extends StatefulWidget {
   @override
-  _AuthenticationV2State createState() => _AuthenticationV2State();
+  _RegisterUserState createState() => _RegisterUserState();
 }
 
-class _AuthenticationV2State extends State<AuthenticationV2> {
+class _RegisterUserState extends State<RegisterUser> {
   bool isObsecureText = true;
   final formKey = GlobalKey<FormState>();
 
@@ -45,7 +45,7 @@ class _AuthenticationV2State extends State<AuthenticationV2> {
                       return Align(
                         alignment: Alignment.topLeft,
                         child: Text(
-                          "Authenticate",
+                          "Register",
                           style: GoogleFonts.breeSerif(
                             color: Colors.white,
                             fontWeight: FontWeight.bold,
@@ -76,6 +76,32 @@ class _AuthenticationV2State extends State<AuthenticationV2> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: <Widget>[
+                            TextFormField(
+                              controller: authenticationController.name,
+                              validator: (value) {
+                                print(value);
+                                if (value == null || value.isEmpty) {
+                                  return 'Name field required';
+                                }
+                                return null;
+                              },
+                              style: GoogleFonts.poppins(
+                                fontSize: 14,
+                                color: Colors.black,
+                              ),
+                              decoration: InputDecoration(
+                                hintText: 'Name',
+                                hintStyle: GoogleFonts.poppins(
+                                  fontSize: 14,
+                                  color: Colors.grey,
+                                ),
+                                fillColor: Colors.white,
+                                filled: true,
+                              ),
+                            ),
+                            SizedBox(
+                              height: 30,
+                            ),
                             TextFormField(
                               controller:
                                   authenticationController.emailController,
@@ -152,11 +178,11 @@ class _AuthenticationV2State extends State<AuthenticationV2> {
                               onPressed: () async {
                                 if (formKey.currentState!.validate()) {
                                   await authenticationController
-                                      .signInWithEmail(context);
+                                      .signUpWithEmail(context);
                                 }
                               },
                               child: Text(
-                                'Sign In',
+                                'Sign Up',
                                 style: GoogleFonts.poppins(
                                   fontSize: 14,
                                   color: Colors.black,
@@ -164,36 +190,6 @@ class _AuthenticationV2State extends State<AuthenticationV2> {
                                 ),
                               ),
                             ),
-                            SizedBox(
-                              height: 30,
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  'Do not have account?',
-                                  style: GoogleFonts.poppins(
-                                    fontSize: 14,
-                                    color: Colors.white,
-                                  ),
-                                ),
-                                SizedBox(
-                                  width: 10,
-                                ),
-                                InkWell(
-                                  onTap: () {
-                                    Navigator.pushNamed(context, '/register');
-                                  },
-                                  child: Text(
-                                    'Register Now',
-                                    style: GoogleFonts.poppins(
-                                      fontSize: 14,
-                                      color: Colors.orange,
-                                    ),
-                                  ),
-                                )
-                              ],
-                            )
                           ],
                         ),
                       ),

@@ -1,6 +1,7 @@
 import 'package:block_pay/main.dart';
 import 'package:block_pay/view/authenticationV2.dart';
 import 'package:block_pay/view/home_page.dart';
+import 'package:block_pay/view/register.dart';
 import 'package:flutter/material.dart';
 
 class GeneratedRoutes {
@@ -13,6 +14,8 @@ class GeneratedRoutes {
         return MaterialPageRoute(builder: (_) => HomePage());
       case "/check":
         return MaterialPageRoute(builder: (_) => Transition());
+          case "/register":
+        return MaterialPageRoute(builder: (_) => RegisterUser());
       default:
         return MaterialPageRoute(builder: (_) => AuthenticationV2());
     }

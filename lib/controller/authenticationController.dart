@@ -13,6 +13,8 @@ class AuthenticationController extends ChangeNotifier {
   String? smsCode;
   String? verificationId;
   SharedPreferences? sharedPreferences;
+  TextEditingController? emailController;
+  TextEditingController? passwordController;
 
   /**
    * Sign in details
@@ -38,6 +40,8 @@ class AuthenticationController extends ChangeNotifier {
     otp = TextEditingController();
     name = TextEditingController();
     email = TextEditingController();
+    emailController = TextEditingController();
+    passwordController = TextEditingController();
     auth = FirebaseAuth.instance;
     firestore = FirebaseFirestore.instance;
     googleSignIn = GoogleSignIn(
@@ -82,7 +86,8 @@ class AuthenticationController extends ChangeNotifier {
         print("verification done ${user.providerId}");
       };
 
-      final PhoneVerificationFailed verifiedError = (FirebaseAuthException user) {
+      final PhoneVerificationFailed verifiedError =
+          (FirebaseAuthException user) {
         print("verification failed ${user.code} ${user.message}");
       };
 
@@ -101,8 +106,8 @@ class AuthenticationController extends ChangeNotifier {
 
   void signIn() async {
     try {
-      final AuthCredential credential =
-          PhoneAuthProvider.credential(verificationId: verificationId!, smsCode: otp!.text);
+      final AuthCredential credential = PhoneAuthProvider.credential(
+          verificationId: verificationId!, smsCode: otp!.text);
       final firebaseUser = await auth!.signInWithCredential(credential);
       if (firebaseUser.user!.uid != null) {
         var data = {
@@ -112,7 +117,10 @@ class AuthenticationController extends ChangeNotifier {
           "created_at": DateTime.now().millisecondsSinceEpoch,
           "updated_at": DateTime.now().millisecondsSinceEpoch
         };
-        await firestore!.collection("user").doc(firebaseUser.user!.uid).set(data, SetOptions(merge: true));
+        await firestore!
+            .collection("user")
+            .doc(firebaseUser.user!.uid)
+            .set(data, SetOptions(merge: true));
         sharedPreferences = await SharedPreferences.getInstance();
         sharedPreferences!.setInt("count", 0);
       }
@@ -123,8 +131,10 @@ class AuthenticationController extends ChangeNotifier {
 
   signInWithGoogle() async {
     try {
-      final GoogleSignInAccount? googleSignInAccount = await googleSignIn!.signIn();
-      final GoogleSignInAuthentication googleSignInAuthentication = await googleSignInAccount!.authentication;
+      final GoogleSignInAccount? googleSignInAccount =
+          await googleSignIn!.signIn();
+      final GoogleSignInAuthentication googleSignInAuthentication =
+          await googleSignInAccount!.authentication;
       final AuthCredential credential = GoogleAuthProvider.credential(
         accessToken: googleSignInAuthentication.accessToken,
         idToken: googleSignInAuthentication.idToken,
@@ -139,5 +149,44 @@ class AuthenticationController extends ChangeNotifier {
     } catch (error) {
       print("********** ERROR IN SIGN IN $error");
     }
+  }
+
+  signInWithEmail(BuildContext context) async {
+    try {
+      sharedPreferences = await SharedPreferences.getInstance();
+      UserCredential creds =
+          await FirebaseAuth.instance.signInWithEmailAndPassword(
+        email: emailController!.text,
+        password: passwordController!.text,
+      );
+      if (creds != null) {
+        name!.clear();
+        emailController!.clear();
+        passwordController!.clear();
+        Navigator.pushReplacementNamed(context, '/');
+        sharedPreferences!.setInt("count", 0);
+      }
+    } catch (e) {}
+  }
+
+  signUpWithEmail(BuildContext context) async {
+    try {
+      sharedPreferences = await SharedPreferences.getInstance();
+      UserCredential creds =
+          await FirebaseAuth.instance.createUserWithEmailAndPassword(
+        email: emailController!.text,
+        password: passwordController!.text,
+      );
+      if (creds != null) {
+        await FirebaseFirestore.instance
+            .collection('user')
+            .doc(creds.user!.uid)
+            .set({
+          "name": name!.text,
+          "email": emailController!.text,
+        });
+        signInWithEmail(context);
+      }
+    } catch (e) {}
   }
 }

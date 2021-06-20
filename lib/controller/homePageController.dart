@@ -24,7 +24,8 @@ class HomePageController extends ChangeNotifier {
   /**
    * Adding cards controller
    */
-  final MaskedTextController cardNumber = MaskedTextController(mask: '0000 0000 0000 0000');
+  final MaskedTextController cardNumber =
+      MaskedTextController(mask: '0000 0000 0000 0000');
   final TextEditingController expiryDate = MaskedTextController(mask: '00/00');
   final TextEditingController holderName = TextEditingController();
   final TextEditingController amountAvailable = TextEditingController();
@@ -45,18 +46,21 @@ class HomePageController extends ChangeNotifier {
   void getAuthenticatedUser() async {
     try {
       firebaseUser = auth!.currentUser;
-      user = firebaseUser!.displayName!;
+      var data = await FirebaseFirestore.instance
+          .collection('user')
+          .doc(firebaseUser!.uid)
+          .get();
+      user = data.data()!['name'];
       notifyListeners();
-    } catch(e){
-
-    }
+    } catch (e) {}
   }
 
   getTransactionDetails() async {
     try {
       transaction.clear();
       cardDetails.clear();
-      var transactionDetails = await GetTransactionDetails.getTransactionDetails();
+      var transactionDetails =
+          await GetTransactionDetails.getTransactionDetails();
       print("im here $transactionDetails");
       transactionDetails['chain'].forEach((data) {
         if (data['userId'] == firebaseUser!.uid) {
@@ -74,13 +78,13 @@ class HomePageController extends ChangeNotifier {
     }
   }
 
-  void selectCard(String card){
+  void selectCard(String card) {
     cardType = card;
     notifyListeners();
   }
 
-   addCard() async {
-    try{
+  addCard() async {
+    try {
       var newCards = c.Data(
         holderName: holderName.text,
         cardNumber: cardNumber.text,
@@ -90,23 +94,21 @@ class HomePageController extends ChangeNotifier {
         userId: firebaseUser!.uid,
       );
       statusCode = await PostCardDetails.postCardDetails(newCards.toJson());
-      if(statusCode==200){
+      if (statusCode == 200) {
         allControllerClear();
         getTransactionDetails();
         notifyListeners();
         return statusCode;
       }
-    }catch(e){
-
-    }
+    } catch (e) {}
   }
 
-  allControllerClear(){
+  allControllerClear() {
     holderName.clear();
     cardNumber.clear();
     expiryDate.clear();
     amountAvailable.clear();
-    cardType="VISA";
+    cardType = "VISA";
     notifyListeners();
   }
 
